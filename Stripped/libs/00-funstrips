@@ -1,0 +1,307 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# NOTICE:
+#
+# Individual credits apply depending
+# on function maintainers All licensed
+# code must be GPL3+ compatible or
+# cannot be distributed publicly.
+# ------------------------------------------------- #
+# Version ID:		120127
+# Last Revision:	Fri Jan 27 2012, 01:51:14 UTC-5
+# ------------------------------------------------- #
+
+
+cyanide() {
+    URL='http://www.explosm.net/comics/new/'
+    NAME='Cyanide and Happiness'
+    ARTIST='Kris Wilson, Rob DenBleyker, Matt Melvin, Dave McElfatrick'
+    PATTERN='http://www.\S\+.\w\+/db/files/Comics/\S\+/\w\+.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+threewordphrase() {
+    URL='http://www.threewordphrase.com/'
+    NAME='Three Word Phrase'
+    ARTIST='Ryan Pequin'
+    PATTERN='img.*src="\S\+.gif.*width="[1-9][0-9]\{2\}[0-9]\?.*title'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+dilbert() {
+    URL='http://www.dilbert.com/'
+    NAME='Dilbert'
+    ARTIST='Scott Adams'
+    PATTERN='"/dyn/str_strip/[0-9]\{9\}/[0-9]\{8\}/[0-9]\{7\}/.*\w\+[.]strip[.]\w*.gif"\s\+[ta][il][t][l][e]="The'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+getfuzzy() {
+    URL="http://www.gocomics.com/getfuzzy/$(date +%Y)/$(date +%m)/$(date +%d)/"
+    NAME='Get Fuzzy'
+    ARTIST='Darby Conley'
+    PATTERN='"http://cdn.svcs.c2.uclick.com/c2/\S\+["][ ]width=\S*["][6-9]0'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+foxtrot() {
+    URL="http://www.gocomics.com/foxtrot"
+    NAME='FoxTrot'
+    ARTIST='Bill Amend'
+    PATTERN='"http://cdn.svcs.c2.uclick.com/c2/\S\+["][ |?]width=\S*["][4-9]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+fbofw() {
+    URL='http://www.gocomics.com/forbetterorforworse'
+    NAME='For Better Or For Worse'
+    ARTIST='Bill Amend'
+    PATTERN='"http://cdn.svcs.c2.uclick.com/c2/\S\+["][ ]width=\S*["][6-9]0'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+nonsequitur() {
+    URL="http://www.gocomics.com/nonsequitur/$(date +%Y)/$(date +%m)/$(date +%d)/"
+    NAME='Non Sequitur'
+    ARTIST='Wiley Miller'
+    PATTERN='"http://cdn.svcs.c2.uclick.com/c2/\S\+[ |?]width[=][4-9|"][0-9][0-9][.]*[0]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+xkcd() {
+    URL='http://www.xkcd.com/'
+    NAME='XKCD'
+    ARTIST='Randall Munroe'
+    PATTERN='http://imgs.xkcd.com/comics/\w\+.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+creators() {
+    URL='http://www.creators.com/editorialcartoons.html'
+    NAME='Creators.com Editorial Cartoons'
+    ARTIST='Various Artists'
+    PATTERN='/editorial_cartoons/[0-9]\+/\S\+image.gif'
+    PATTERN_ROOT='http://www.creators.com'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+creators_political() {
+    COLLECTION='chuck-asay steve-benson chip-bok chris-britt mike-luckovich
+    gary-markstein marshall-ramsey steve-sack steve-breen
+    ken-catalino john-deering bob-gorreli clay-jones steve-kelley
+    michael-ramirez paul-szep gary-varvel'
+
+    URL='http://www.creators.com/editorialcartoons/_ITEM_.html'
+    NAME='Creators.com Conservative Cartoons'
+    ARTIST='Various Artists'
+    PATTERN='/editorial_cartoons/[0-9]\+/\S\+[it][mh][au][gm][eb].gif'
+    PATTERN_ROOT='http://www.creators.com'
+    SSECONDS=5
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+sheldon() {
+    URL='http://www.sheldoncomics.com/'
+    NAME='Sheldon'
+    ARTIST='Dave Kellet'
+    PATTERN='strips/sd[0-9]\{3,6\}.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+toothpaste4dinner() {
+    URL='http://toothpastefordinner.com/'
+    NAME='Toothpaste For Dinner'
+    ARTIST='Nitrozac & Snaggy'
+    PATTERN='[0-9]\{6\}/\S\+.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+littlegamers() {
+    URL='http://www.little-gamers.com/'
+    NAME='Little Gamers'
+    ARTIST='Christian Fundin and Pontus Madsen'
+    PATTERN='http://little-gamers.com/comics/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+phd() {
+    URL='http://www.phdcomics.com/comics.php'
+    NAME='PHD'
+    ARTIST='Jorge Cham'
+    PATTERN='http://www.phdcomics.com/comics/archive/phd\w\+.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+playervsplayer() {
+    URL='http://www.pvponline.com/'
+    NAME='Player VS Player'
+    ARTIST='Scott R. Kurtz'
+    PATTERN='comics/\S\+.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+joyoftech() {
+    URL='http://www.joyoftech.com/joyoftech/'
+    NAME='The Joy of Tech'
+    ARTIST='Nitrozac & Snaggy'
+    PATTERN='joyimages/[0-9]\{4,5\}.[pgj][nip][fg]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+nataliedee() {
+    URL='http://nataliedee.com/'
+    NAME='Natalie Dee'
+    ARTIST='Natalie Dee'
+    PATTERN='http://www.nataliedee.com/[0-9]\{6\}/\S\+.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+pearlsbfswine() {
+    URL='http://www.gocomics.com/pearlsbeforeswine'
+    NAME='Pearls Before Swine'
+    ARTIST='Stephan Pastis'
+    PATTERN='http://cdn.svcs.c2.uclick.com/c2/\w\+?width=900.0'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+dorktower() {
+    URL='http://www.dorktower.com/'
+    NAME='Dork Tower'
+    ARTIST='John Kovalic'
+    PATTERN='images/comics/DorkTower[0-9]\{4\}.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+businesscartoons() {
+    URL='http://www.newslettercartoons.com/'
+    NAME='Ted Goff Business Cartoons'
+    ARTIST='Ted Goff'
+    PATTERN='http://www.newslettercartoons.com/today/today.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+hijinksensue() {
+    URL='http://hijinksensue.com/'
+    NAME="Hijink's Ensue"
+    ARTIST='Joel Watson'
+    PATTERN='comics/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}-\S\+.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+comissioned() {
+    URL='http://www.commissionedcomic.com/'
+    NAME='Commissioned Comic'
+    ARTIST='Obsidian'
+    PATTERN='comics/[0-9]\{4\}-[0-9][0-9]-[0-9][0-9].jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+indexed() {
+    URL='http://thisisindexed.com/'
+    NAME='Indexed'
+    ARTIST='Jessica Hagy'
+    PATTERN='wp-content/uploads/[0-9]\{4\}/[0-9]\{2\}/card[0-9]\{5\}.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+extralife() {
+    URL='http://www.myextralife.com/'
+    NAME='Extra-Life'
+    ARTIST='Scott Johnson'
+    PATTERN='http://www.myextralife.com/comics/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[jgp][pin][gf]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+extralife_rnd() {
+    URL='http://www.myextralife.com/?randomcomic'
+    NAME='Extra-Life Random Comic'
+    ARTIST='Scott Johnson'
+    PATTERN='http://www.myextralife.com/comics/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[jgp][pin][gf]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+pcweenies() {
+    URL='http://pcweenies.com/'
+    NAME='PC Weenies'
+    ARTIST='Krishna M. Sadasivam'
+    PATTERN='comics/[0-9]\{4\}-[0-9]\{2\}-\w\+.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+pennyarcade() {
+    URL='http://www.penny-arcade.com/comic/'
+    NAME='Penny Arcade'
+    ARTIST='Penny Arcade, Inc.'
+    PATTERN='http://\S\+.com/photos/\S\+/.*.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+questionablecontent() {
+    URL='http://www.questionablecontent.net/'
+    NAME='Questionable Content'
+    ARTIST='J. Jacques'
+    PATTERN='comics/\w\{4\}.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+userfriendly() {
+    URL='http://www.userfriendly.org/'
+    NAME='User Friendly'
+    ARTIST='Illiad'
+    PATTERN='cartoons/archives/\w\+/\w\+.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+ctrlaltdel() {
+    URL='http://www.cad-comic.com/cad/'
+    NAME='Ctrl+Alt+Del'
+    ARTIST='Tim Buckley'
+    PATTERN='http://v.cdn.cad-comic.com/comics/cad-\w\{8\}-\w\{3,5\}.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+ctrlaltdel_sillies() {
+    URL='http://www.cad-comic.com/sillies/random'
+    NAME='Ctrl+Alt+Del Sillies'
+    ARTIST='Tim Buckley'
+    PATTERN='http://v.cdn.cad-comic.com/comics/sillies-\w\{8\}-\w\{3,5\}.[gjp][ipn][fg]'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+drive() {
+    URL='http://www.drivecomic.com/'
+    NAME='Drive'
+    ARTIST='Dave Kellet'
+    PATTERN='strips/drive[0-9]\{6\}.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+leasticoulddo() {
+    URL='http://leasticoulddo.com/'
+    NAME='Least I Could Do'
+    ARTIST='Ryan Sohmer and Lar Desouza'
+    PATTERN='http://cdn.leasticoulddo.com/comics/[0-9]\{8\}.gif'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+overcompensating() {
+    URL='http://www.overcompensating.com/'
+    NAME='Overcompensating'
+    ARTIST='Jeffrey Rowland'
+    PATTERN='comics/[0-9]\{8\}.png'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+apod() {
+    URL='http://apod.nasa.gov/apod/'
+    NAME='Astronomy Picture Of the Day'
+    ARTIST='NASA'
+    PATTERN='image/[0-9]\{4\}/\S\+[0-9]*\S*.jpg'
+    MAINTAINER='code933k NO SPAM gmail DOT com'
+}
+
+
+# vim:set ft=sh:tw=55:nowrap:

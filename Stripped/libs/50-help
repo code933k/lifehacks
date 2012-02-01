@@ -1,0 +1,245 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120123
+# Last Revision:	Mon Jan 23 2012, 16:10:22 UTC-5
+# ------------------------------------------------- #
+
+
+help() {
+    cat << HEADER
+───────────────────────────────────────────────────
+                   STRIPPED! $VERSION
+       Copyright (C) 2012  Mario García H.
+                License GNU/GPL3+
+───────────────────────────────────────────────────
+[ press q to exit ]
+
+HEADER
+
+    case $1 in
+    usage )
+        cat << HELP
+USAGE:
+    stripped [ options ]
+
+Which means you can use one, various or none of the
+options below.
+
+
+COMMON OPTIONS:
+    -l|--list       Display the global list of
+                    available comics.
+
+    -s|--show       Show a more detailed list (-l)
+
+    -v|--verbose    Modifies the output of another
+                    options and operations, showing
+                    more detailed information about
+                    them.
+
+    -c|--checkwebz  Check whether there is an
+                    available Internet connection.
+                    If not, exits with error.
+
+    -h|--help       Show extended functions and more
+                    information about them.
+
+                    Supports options on its own:
+                    [ops]   Operation help.  
+                    [conf]  Configuration help.
+                    [usage] This screen.
+
+
+CACHING / RETRIEVING:
+
+Just execute "stripped" to catch all comics
+
+───────────────────────────────────────────────────
+───────────────────────────────────────────────────
+
+HELP
+        ;;
+    ops )
+        cat << HELP
+OPERATION:
+
+Execute: "stripped -l" to check the list of strips
+available.  Pick some comics you like. Then,
+execute: "stripped comic1 comic2 comic3", where
+comic# is the name of the comics you want to get.
+
+$HOME/Comics directory is created, and the comic
+strips you picked are all cached there.
+
+Then you can navigate through directories whose
+name is the present date or just by strip name.
+
+If a problem occurs, the program will try to tell
+you whether it is a program BUG or some hint about
+it.
+
+For extended tips check, README.
+
+───────────────────────────────────────────────────
+───────────────────────────────────────────────────
+
+HELP
+    ;;
+    conf )
+        cat << HELP
+CONFIGURATION:
+
+Following freedesktop directives, configuration
+files are created on:
+- $HOME/.config/stripped/
+
+An automated sanitizer checks that this dir is in
+place with permission 0710 whenever the program is
+executed.
+
+Configuration files are: dir, funstrips, comics
+
+- comics:
+    File containing a space separated list of user
+    preferred strips, example:
+    dilbert xkcd nonsequitur
+
+    If this file is not found. The program will
+    download all the comic strips available.
+
+- dir:
+    This file contains the name of the local
+    directory where retrieved strips should be
+    stored. For example, ~/Pictures/ComicStrips
+
+    If that is not found in the default directory, 
+    The directory ~/Comics will be used by
+    default.
+
+- funstrips:
+    This file contains user defined functions for
+    strips retrieval. It does not need to be
+    an executable.
+
+    Be CAREFUL to make this correct as functions
+    are ordinary shell ones, and their execution
+    does not count on any protected mode as they
+    are executed.
+
+    User defined function override the program
+    defaults.
+
+    Example:
+
+    strip_name() {
+        URL='http://www.strip_homepage.net'
+        NAME='Strip Name'
+        ARTIST='Artist Name'
+        PATTERN='grep POSIX regexp'
+        MAINTAINER='youremail NO SPAM site.net'
+    }
+
+    See regexp 'man grep' if you need help
+    understanding patterns. Or just look for
+    examples on the files distributed with
+    STRIPPED!
+    
+───────────────────────────────────────────────────
+───────────────────────────────────────────────────
+
+HELP
+            ;;
+        * )
+    cat << HELP
+usage: stripped [option]
+
+options:
+    -u|--usage      Fast/Short help on common
+                    options.
+
+    -h|--help       This help screen.  It also
+                    accepts some extra options.
+                    [ops]   Same as usage (-u).
+                    [conf]  Configuration help.
+
+    -c|--checkwebz  Check whether there is a
+                    connection to the Internet. If
+                    not, exits with error.
+
+    -f|--force      Force retrieval even if the
+                    program detects one or more
+                    strips were already retrieved.
+
+    -v|--verbose    Show extra output.  Modifies
+                    the output of some options,
+                    not all of them.
+
+    -l|--list       List current strips
+
+    -s|--show       Detailed list (-l). Shows more
+                    detailed information about
+                    comics.  Option (-v) is
+                    recommended before (-s) if you
+                    want complete detail.
+
+    -b|--blacklist  Show the current 'blacklist'
+                    user file.
+
+    -i|--inhibit    Inhibits downloading of files
+                    and shows some extra output for
+                    some commands.
+
+                    NOTICE: Image pattern output is
+                    not accurate if there is not a
+                    cache file already downloaded.
+
+    -w|--write-html Create an html(5) page plus
+                    customizable css to watch comic
+                    strips from a web browser.
+                    Names in this page are ordered
+                    after comics configuration file
+                    if it is present.
+
+    -e|--edit       If EDITOR variable is defined,
+                    starts a text editor to create
+                    or modify the local funstrips
+                    file.  If you make a mistake,
+                    a copy is saved beforehand as
+                    .funstrips.old
+
+    -d|--debug      Adds set -o xtrace, set -o
+                    verbose to shell options plus
+                    internal inhibition (-i).
+
+    -W|--warn       Activate warnings.
+
+    -C|--comp       Comics completion helper. Same
+                    as (-l) but shown without
+                    headers.
+
+    --version       Shows current version.
+
+Any input different from this options or no input
+at all starts retrieving all comics configured by
+default. If that input matches any strip in the
+list it will try to download just that.
+
+for more instructions:
+    * man stripped
+    * README.txt
+
+Enjoy!
+
+───────────────────────────────────────────────────
+───────────────────────────────────────────────────
+
+HELP
+    ;;
+    esac
+}
+
+
+# vim:set ft=sh:tw=55:nowrap:

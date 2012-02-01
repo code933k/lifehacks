@@ -1,0 +1,166 @@
+.\" vim: set tw=70:
+.\" Process this file with:
+.\" Written By: Mario García H. http://lifehacks.googlecode.com
+.\" groff -man -Tutf8 stripped.1
+.\" The code below was taken from grep's man page.
+.if !\n(.g \{\
+.	if !\w|\*(lq| \{\
+.		ds lq ``
+.		if \w'\(lq' .ds lq "\(lq
+.	\}
+.	if !\w|\*(rq| \{\
+.		ds rq ''
+.		if \w'\(rq' .ds rq "\(rq
+.	\}
+.\}
+.ie t .ds Tx \s-1T\v'.4n'\h'-.1667'E\v'-.4n'\h'-.125'X\s0
+. el  .ds Tx TeX
+.de Id
+. ds Yr \\$4
+. substring Yr 0 3
+. ds Mn \\$4
+. substring Mn 5 6
+. ds Dy \\$4
+. substring Dy 8 9
+. \" ISO 8601 date, complete format, extended representation
+. ds Dt \\*(Yr-\\*(Mn-\\*(Dy
+..
+.TH STRIPPED 1 \*(Dt "stripped" "User Commands"
+.hy 0
+.
+.SH NAME
+stripped \- caches web comic strips creating organized collections
+.SH SYNOPSIS
+.B stripped
+.RI [OPTIONS]
+.RI [STRIPS]
+.SH DESCRIPTION
+.B stripped
+creates web comic collections for visualizing from image or web
+browsers.  Those are catalogued by date and name in a way flexible
+enough to permit automated caching and navigation of comics
+updated hourly, weekly or monthly.
+
+Lists may be created from a bunch of default comic strip definitions
+or, conversely, by excluding a few that the user does not like: 
+.I blacklist.
+In addition, an editing mechanism is provided so users can
+easily add or modify strips from their current collections
+by means of $EDITOR.
+
+The idea is offering smooth and simple operation
+.I out\-of\-the\-box
+on any Unix-like base system install -which is desirable for
+distributions such as Puppy Linux, DSL or liveCD/USB-
+without sacrificing any power options or maintainability.
+.
+.SH OPTIONS
+.\" .SS "Short options and their equivalent long options (from left to right)"
+.TP
+.BR \-c ", " \-\^\-checkwebz
+Check whether there is a connection to the Internet. If not, the program
+exits with error.
+.TP
+.BR \-f ", " \-\^\-force
+Force retrieval of strips even if the program tries to skip them
+after detecting that one or more strips were already retrieved.  If
+files retrieved through this mechanism are different than the previous
+ones, new and previous contents are preserved. If those are the same,
+new contents overwrite previous.
+.TP
+.BR \-v ", " \-\^\-verbose
+Enable extra output for various internal operations. 
+.IR \-s
+.TP
+.BR \-l ", " \-\^\-list
+Print a list of strips currently supported.
+.TP
+.BR \-s ", " \-\^\-show
+Detailed list.  If option
+.IR \-v
+or
+.IR \-\^\-verbose
+is used in combination with this one, all the definitions associated
+with the strip are displayed.
+.TP
+.BR \-b ", " \-\^\-blacklist
+Print user custom list of currently blacklisted comics.
+.TP
+.BR \-i ", " \-\^\-inhibit
+Inhibits actual downloading of files and shows actions as extra output
+to the in case
+.TP
+.BR \-e ", " \-\^\-edit
+Edit user funstrips file to include a different comic strip or modify
+an existing one.
+.TP
+.BR \-w ", " \-\^\-write-html
+Create an HTML 5 page index plus customizable css file
+to watch comic strips from a web browser.
+Names in this page are ordered after comics configuration
+file if it is present.
+.TP
+.BR \-r ", " \-\^\-rm-old
+Remove old files. If a number is given to
+.R -r
+then files older than that number of days are removed after all
+operations are completed.
+.TP
+.BR \-W ", " \-\^\-warn
+Print user friendly warnings.
+.TP
+.BR \-d ", " \-\^\-debug
+Debug the program. See DIAGNOSTICS below for an example on
+how to do it.
+.TP
+.BR \-u ", " \-\^\-usage
+Print a reduced help screen summarizing the most common command-line options
+.TP
+.BR \-h ", " \-\^\-help " " [ops] " " [conf]
+Print a message summarizing all options available. It is recommended as an
+up to date command-line options guide. Help accepts
+.I ops
+and
+.I conf
+as extra arguments to show help focused on program
+.I operation
+and
+.I configuration
+.TP
+.BR \-\^\-version
+Print the program version number, download manager and exit.
+.
+.SH FILES
+.
+User configuration for comics cache dir:
+.TP
+.I "~/.config/stripped/dir"
+.TP
+Custom comics list:
+.TP
+.I "~/.config/stripped/comics"
+.TP
+Custom comic definitions:
+.TP
+.I "~/.config/stripped/funstrips"
+.
+.SH DIAGNOSTICS
+Caching errors are stored in
+.I stripped.log
+file, inside the comics directory.
+Diagnostic information is silent unless option
+.R -W
+is used.  In this case, all warnings are shown
+after all requested operations are finished.
+The most convenient way to debug the program is:
+
+.BR "stripped -d [options] [strips] 2>&1 | less"
+.
+.SH BUGS
+No bugs known.
+.
+.SH AUTHOR
+Mario García H. <code933k at gmail dot com>
+.
+.SH "SEE ALSO"
+grep(1), curl(1), aria2c(1), wget(1)

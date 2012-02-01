@@ -1,0 +1,21 @@
+= Stripped: =
+Caches web comic strips creating organized collections
+
+= Hashfm: =
+(Recovered after an HDD crash / now useless ) 
+Scrobbler I find useful and am willing to re-write in
+spare time.
+
+= asvm: =
+A(n awk) Simple Volume Manager (I love this one)
+There is a simple version called asvm.udisks which you
+should use (after configuring udisks properly) for
+single or multi _user_ environment.
+
+Basically, automates disk/media mounting and it's
+very useful on WM environments
+(i.e., ratpoison, xmonad, dwm, wmii, etcetera).
+
+The one from suckless isn't worth today and had some
+problems in the past too.
+

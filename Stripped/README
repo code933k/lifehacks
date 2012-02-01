@@ -1,0 +1,86 @@
+= README, STRIPPED! =
+%% Version ID:		120117
+%% Last Revision:	Tue Jan 17 2012, 00:58:53 UTC-5
+
+
+== DESCRIPTION ==
+Cache collections of web comic strips viewable from image or (in
+the future) web browsers.
+
+Saving time and easing the repetitive task of browsing large lists
+of comics from many pages. Making this program a POSIXly shell
+alternative to dailystrips considering simplicity, portability,
+reliability and working with a base system.  i.e., Puppy Linux,
+DSL, USB, liveCD.
+
+
+== NOTICE ==
+Whatever you do with this software beyond the scope of browsing
+privately your favorite strips is YOUR responsibility alone! Some
+countries have laws impairing sane recreation. Check whether your
+country is an undisclosed dictatorship before using this product!
+
+
+== TIPS ==
+# There is a bash_completion file for stripped, so you can get
+  easy shell completions for all the commands and comic strips.
+  
+# regexp results with various " or ' in them are auto-cropped by
+  default, adding extra power to normal grep results.
+  i.e., "comic.jpg" width=" becomes just: comic.jpg
+
+# PATTERN_ROOT='http://...' adds a different URL than the home
+  page of the comic strip. This is very useful whenever the
+  'real' URL cannot be derived from the pattern result nor the
+  home page itself.  Check out examples in the 00-funstrips file
+  distributed with stripped.
+  
+# COLLECTION='foo bar fuzz' creates a pattern for every artist or
+  comic in the COLLECTION list, which is referenced by _ITEM_.
+  creators_political is an example of this.
+  
+# Using collections feature is problematic:  It may produce the
+  impression that a site is under attack. Thus, a secuential
+  retrieval may fail as it is faster than any human during a
+  normal browsing session.
+  SSECONDS=30 may be set to any number of seconds to try to
+  prevent this problem from happening. See the example above.
+  
+# `stripped -v -s` shows verbose information about the strip
+  names feed from the command line or all of them if none is
+  given.  i.e., compare `stripped -s` to `stripped -v -s`.
+
+# `stripped comic1 comic2` retrieves just that strips.
+
+# `stripped -i` avoids making any actions as downloading, etc. It
+  is just an "inhibition mode".  Necessary directories are still
+  created and checks performed.  Thus, `stripped -v -i` is a
+  convenient way to debug bad results without extra shell
+  facilities as `stripped -d`  does.
+
+# `stripped -c` is very useful whenever you are using this from
+  cron, at, remind or another programmed command facility. Thus,
+  if there isn't an Internet connection, stripped will exit
+  cleanly instead of hanging for minutes trying to establish
+  a connection for each strip programmed.
+
+# `stripped -C` is a 'hidden option' which lists all available
+  comics just like `-l` but without headers.  It was implemented
+  for help scripts. i.e., bash shell <TAB> completion
+  functionality.
+
+# Just as the contents of `comics`, a `blacklist` file placed in
+  the user configuration directory negates the names of the
+  comics placed in it. Thus, you don't really need to set a long
+  `comics` list but create one `blacklist`, just for those you
+  don't want to be cached by the program.
+
+
+== CAVEATS ==
+Cached content usually occupies about 2MB extra, depending on the
+size of web pages and the number of comics cached.  It is
+necessary for keeping non artificial logs and checking regexp
+sanely.
+
+
+%% vim: set tw=65:

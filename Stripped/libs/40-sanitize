@@ -1,0 +1,190 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120121
+# Last Revision:	Sat Jan 21 2012, 15:36:37 UTC-5
+# ------------------------------------------------- #
+
+
+sanitize() {
+    mkdir -p "$CONFDIR" || error mkdir "$CONFDIR"
+
+    if  [ -z "$OVERRIDE" ] && \
+        [ -s "$CONFDIR/comics" ]
+    then
+        COMICS=$(cat "$CONFDIR/comics")
+    else
+        unset OVERRIDE opts
+    fi
+
+    if [ -s "$CONFDIR/dir" ]
+    then
+        DIRECTORY=$(cat "$CONFDIR/dir")
+    fi
+
+    if [ -s "$CONFDIR/funstrips" ]
+    then
+        local USERFUNTIME=$(last_modified "$CONFDIR/funstrips")
+        local DEFSFUNTIME=$(last_modified "$LIBSDIR/00-funstrips")
+
+        if [  "$USERFUNTIME" -gt "$DEFSFUNTIME" ]
+        then
+            . "$CONFDIR/funstrips"
+        else
+            $VERBOSE || $WARNINGS && \
+            warn \
+            "$CONFDIR/funstrips skipped: Older than default."
+        fi
+    fi
+
+    # Remove comics from user blacklist
+    if [ -s "$CONFDIR/blacklist" ]
+    then
+        blacklisted=''
+
+        for disliked in $(cat "$CONFDIR/blacklist")
+        do
+            blacklisted="$blacklisted $disliked"
+            COMICS=$(echo $COMICS |$SED 's/'$disliked'//g')
+        done
+
+        # $VERBOSE || $WARNINGS && \
+        # warn "User blacklisted: $blacklisted"
+    fi
+
+    # HOME abreviation must be read properly
+    DIRECTORY=$(echo "$DIRECTORY" |sed 's#^~#'$HOME'#')
+
+    mkdir -p "$DIRECTORY" || error mkdir "$DIRECTORY"
+    chmod 0710 "$CONFDIR" || error chmod "$DIRECTORY"
+
+    return 0
+}
+
+
+interwebz() {
+    # Based on shellmagics sys_interwebz
+    # Check whether there is an Internet connection
+    # CALL:interwebz:[IGNORED]
+    # RETN:interwebz:[1:failed][0:ok]
+
+    local RESOLV=/etc/resolv.conf
+
+    # Ping cannot be local or errors will arise
+    # less explicitly.
+
+    ping=$(prg_check ping) || error """
+    Install *ping* or check permission, it is
+    needed for controlling conectivity.
+
+    If you are unable to do so, just don't try
+    to use option -c (--checkwebz) in the
+    future.
+
+    Sorry for the inconvenience.
+    """
+
+    if [ -s "$RESOLV" ] && [ -r "$RESOLV" ]
+    then
+        if [ -n "$COLOR_SUPPORT" ]
+        then
+            printf '\n\033[01;32mChecking Internet '
+            printf 'connectivity...\033[m\n\n'
+        else
+            printf '\nChecking Internet '
+            printf 'connectivity...\n\n'
+        fi
+
+        for srv in $(awk '$1 ~ /nameserver/ \
+            {print $2}' /etc/resolv.conf)
+        do
+            if [ $DEBUG = true ]
+            then
+                echo $ping -W 1 -c 2 $srv >/dev/null
+            else
+                $ping -W 1 -c 2 $srv >/dev/null
+            fi
+        done
+    fi
+}
+
+
+check_overrides() {
+    opts="-c -d -e -f -h -i -l -r -s -u -v -w --checkwebz --debug
+    --edit --force --help --inhibit --list --rm-old --show --usage
+    --verbose --version --write-html"
+
+    if echo "$COMICS"|$GREP -- "^$1$" >/dev/null
+    then
+        OVERRIDE="$OVERRIDE $1"
+    elif ! echo "$opts"|$GREP -- "^$1$" >/dev/null
+    then
+        show_header 'Your trustworthy error reporter'
+        echo
+        error "$1, is not a recognized option!"
+        return 1
+    fi
+
+    return 0
+}
+
+
+mklog() {
+    touch "$REPORT"
+
+    case $1 in
+        ret_err )
+            shift 1
+            # COUNT error recurrence
+            NUMBER=$(awk '/'"$1"'/ {print $NF}' "$REPORT")
+
+            if  echo "$NUMBER" \
+                | $GREP -- '^[0-9]*$' >/dev/null
+            then
+                NUMBER=$(($NUMBER+1))
+            else
+                NUMBER=1
+            fi
+
+            $SED -i '/'"$1"'/D' "$REPORT"
+
+            $VERBOSE && \
+            echo "error: $1 $NUMBER" | $TEE "$REPORT" || \
+            echo "error: $1 $NUMBER" >> "$REPORT"
+
+            return 0
+            ;;
+        ok|clean )
+            shift 1
+            $SED -i '/'"$1"'/D' "$REPORT"
+
+            return 0
+            ;;
+        * )
+            $VERBOSE && \
+            echo "$1" | $TEE "$REPORT" || \
+            echo "$1" >> "$REPORT"
+
+            return 0
+            ;;
+    esac
+}
+
+
+remove_old() {
+    if echo "$RM_OLD_F" |$GREP -- '^[0-9]\+$' >/dev/null
+    then
+        echo
+    else
+        error '-r|--rm-old argument should be a number'
+    fi
+}
+
+make_html() {
+    echo
+}
+
+
+# vim:set ft=sh:tw=66:nowrap:

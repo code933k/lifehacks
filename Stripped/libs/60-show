@@ -1,0 +1,93 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120120
+# Last Revision:	Fri Jan 20 2012, 18:00:52 UTC-5
+# ------------------------------------------------- #
+
+
+show_email() {
+    echo "$1" | sed 's/ NO SPAM /@/;s/ DOT /./'
+}
+
+
+show_header() {
+    local STRIPPED='STRIPPED!'
+    STRIPPED="$STRIPPED $VERSION"
+
+    $COLOR_SUPPORT && \
+    STRIPPED='\033[01;34mSTRIPPED! '$VERSION'\033[m'
+
+printf """
+─────────────────────────────────
+          $STRIPPED
+ $1
+─────────────────────────────────
+
+"""
+}
+
+
+show_info() {
+case $VERBOSE in
+    0|false )
+cat << STRIP_INFO
+$DWNL_STATUS $NAME [ by, $ARTIST ]
+STRIP_INFO
+        return 0
+        ;;
+    * )
+cat << STRIP_INFO
+
+Strip      : $NAME
+Artist     : $ARTIST
+Home URL   : $URL
+regexp     : $PATTERN
+Local      : $DIRECTORY/strips/$strip
+Maintainer : $(show_email "$MAINTAINER")
+
+STRIP_INFO
+        return 0
+        ;;
+esac
+}
+
+
+show_all() {
+    show_header '   available web comics list'
+    for strip in $COMICS
+    do
+        $strip
+        show_info
+    done
+}
+
+
+show_warnings() {
+    $WARNINGS || return 0
+
+    local STDERR=/dev/stderr
+    local WRN_WIDTH=42
+
+    $COLOR_SUPPORT && \
+    WRN_MSG='\033[01;33mWARNINGS:\033[m' || \
+    WRN_MSG='WARNINGS:'
+
+    if [ -z "$_SAVED_WARNINGS" ]
+    then
+        return 0
+    fi
+
+
+printf """
+─────────────────────────────────────────
+ $WRN_MSG  $_SAVED_WARNINGS
+─────────────────────────────────────────
+
+""" |$FMT -"$(($WRN_WIDTH))" |$TEE $STERR
+}
+
+
+# vim:set ft=sh:tw=55:nowrap:

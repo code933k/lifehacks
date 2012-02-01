@@ -1,0 +1,23 @@
+stripped (0.4) RELEASED; urgency=low
+  * Initial Release.
+
+ -- Mario García H. <code933k@gmail.com> Tue, 31 Jan 2012 11:01:43 -0500
+
+
+stripped (0.3) stable; urgency=low
+  * Initial Release.
+
+ -- Mario García H. <code933k@gmail.com> Tue, 31 Jan 2012 11:01:43 -0500
+
+
+stripped (0.2) unstable; urgency=low
+  * Added COLLECTIONS to funstrips.
+  * Draft mechanism to handle collections
+  * Duplicates handler (hard-links)
+
+ -- Mario García H. <code933k@gmail.com> Tue, 31 Jan 2012 11:01:43 -0500
+
+stripped (0.1) stable; urgency=low
+  * Initial version. Basic functionality.
+
+ -- Mario García H. <code933k@gmail.com> Tue, 31 Jan 2012 11:01:43 -0500

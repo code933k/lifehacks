@@ -1,0 +1,30 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120123
+# Last Revision:	Mon Jan 23 2012, 00:54:04 UTC-5
+# ------------------------------------------------- #
+
+# make_html() {
+# cat << HTML5
+# <!DOCTYPE HTML>
+# <html>
+# <head>
+# <title>sTrIpPeD! $(date)</title>
+	# <link type="text/css" rel="stylesheet" href="style_strips.css">
+# </head>
+
+
+# <div id='footer'>
+    # <p>
+        # Brought to you by: _STRIPPED_PROG_NAME_ _STRIPPED_PROG_VERSION_
+    # </p>
+# </div>
+# </body>
+
+# </html>
+# HTML5
+# }
+

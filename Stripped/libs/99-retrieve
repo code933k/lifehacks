@@ -1,0 +1,226 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120124
+# Last Revision:	Tue Jan 24 2012, 18:29:03 UTC-5
+# ------------------------------------------------- #
+
+
+makelink() {
+    local NODUPE=true
+    local IDXDIR="$DIRECTORY/${TODAYS}"
+    local PREIMG="$SAVEDIR/${TODAYS}${TIME}"
+    [ -n "$item" ] && PREIMG="$PREIMG-$item" # COLLECTIONS
+    local ACTFILE=$(readlink -m "$PREIMG")
+    local EXT=$($FILE --mime-type "$ACTFILE" \
+    |$SED 's#.*/##')
+
+    mkdir -p "$IDXDIR" || error mkdir "$IDXDIR"
+
+    if  [ "$EXT" = 'x-empty' ] || \
+        [ "$EXT" = 'html' ] || \
+        [ ! -s "$ACTFILE" ]
+    then
+        warn "Bad result from: $strip"
+        warn "$($RM -vf $ACTFILE)"
+        
+        if ! $DEBUG
+        then
+            touch "$REPORT"
+            mklog ret_err "$TODAYS -> $strip"
+            echo "$($RM -vf $ACTFILE)"
+        fi
+
+        return 1
+    else
+        mklog clean "$TODAYS -> $strip"
+    fi
+
+    # Check for duplicates (previous images are valid already)
+    for possible_dupe in $(echo $DIRECTORY/strips/$strip/*.*.*)
+    do
+        [ "$PREIMG" = "$possible_dupe" ] && continue
+
+        compare_files "$PREIMG" "$possible_dupe" && \
+        $LN -fn "$possible_dupe" "$PREIMG"
+    done
+
+    if [ $1 = false ] || [ $DEBUG = true ]
+    then
+        return 0
+    fi
+
+    if $VERBOSE
+    then
+        printf '\n- Making links\n'
+        $LN -fvn -- "$PREIMG" \
+        "$IDXDIR/${strip}${ARTIDX}${TIME}.$EXT"
+        printf '───────────────────────────────\n'
+    else
+        $LN -fn -- "$PREIMG" \
+        "$IDXDIR/${strip}${ARTIDX}${TIME}.$EXT" 
+    fi
+}
+
+
+process_strip() {
+    local ARTIDX=''
+    local TIME="-$(date +'%H.%M')"
+    [ -n "$item" ] && ARTIDX="-$item"
+
+    # If there is not 12.01.11-*.*
+    # TIME is ok, if not, erase it
+    # if [ $TODAYS ]
+    # then
+                
+    # fi
+
+    SAVEDIR="$DIRECTORY/strips/$strip"
+    mkdir -p "$SAVEDIR" || error 'mkdir' "$SAVEDIR"
+
+    # DOWNLOAD cache file
+    if  [ ! -s "$SAVEDIR/cached${ARTIDX}" ] || \
+        [ $FORCED = true ] || \
+        [ $(creation_date \
+        "$SAVEDIR/cached${ARTIDX}") != "$TODAYS" ]
+    then
+        DWNL_STATUS='+'
+        show_info |$SED 's/_ITEM_/'$item'/g'
+
+        $DEBUG && \
+        echo "$DWNL $_URL $DWNLOPT \
+        $SAVEDIR/cached${ARTIDX}" || \
+
+        $DWNL "$_URL" $DWNLOPT \
+        "$SAVEDIR/cached${ARTIDX}"
+        catch_errors
+
+        # Prevent date errors
+        touch "$SAVEDIR/cached${ARTIDX}"
+    else
+        DWNL_STATUS='✔'
+        show_info |$SED 's/_ITEM_/'$item'/g'
+    
+        $VERBOSE && \
+        printf '✔ skipping cache, already downloaded\n'
+    fi
+
+    # CONVERT download pattern to the specific image
+
+    # 1. Make sure we get only one result
+    PATTERN=$(cat $SAVEDIR/cached${ARTIDX} | \
+    $GREP -m 1 -o "$PATTERN" | $TAIL -1)
+
+    # 2. Magically crop results including " or '
+    if echo "$PATTERN" | $GREP "[\"|']" >/dev/null
+    then
+        PATTERN=$(echo "$PATTERN" |$AWK -F "[\"|']" '{print $2}')
+    fi
+
+    # SELECT pattern: whether it comes from another web address,
+    # follows another home URL or should be treated plainly
+    if echo "$PATTERN" |$GREP '^http://' >/dev/null
+    then
+        IMG="$PATTERN"
+    elif [ -n "$PATTERN_ROOT" ]
+    then
+        IMG="${PATTERN_ROOT}${PATTERN}"
+        unset PATTERN_ROOT
+    else
+        IMG="${_URL}${PATTERN}"
+    fi
+
+    # DOWNLOAD the strip image (pointed by URL at this time)
+    if [ ! -s "$SAVEDIR/$TODAYS${ARTIDX}" ] || [ $FORCED = true ]
+    then
+        $VERBOSE && \
+        printf "\n- result: $IMG\n"
+
+        $DEBUG && \
+        echo "$DWNL $IMG $DWNLOPT \
+        $SAVEDIR/${TODAYS}${TIME}${ARTIDX}" \
+        || $DWNL "$IMG" $DWNLOPT \
+        "$SAVEDIR/${TODAYS}${TIME}${ARTIDX}"
+
+        catch_errors
+
+        # Prevent date errors
+        touch "$SAVEDIR/${TODAYS}${TIME}${ARTIDX}"
+    else
+        $VERBOSE && \
+        printf '✔ skipping image, already downloaded\n'
+        NOMAKELNK=true
+
+        $VERBOSE && \
+        printf "\n- result: $IMG\n"
+
+    fi
+
+    # LINK retrieved images to today's collection
+    if [ $DEBUG = true ] || [ $NOMAKELNK = true ]
+    then
+        $VERBOSE && \
+        makelink false
+    else
+        makelink true
+    fi
+
+    NOMAKELNK=false
+    return 0
+}
+
+
+check_definition() {
+    type "$strip" |$AWK 'NR == 1 {print $NF}'
+}
+
+
+retrieve() {
+    local SAVEDIR=''
+    local IMG=''
+    local NOMAKELNK=false
+    local DWNL_STATUS='✔'
+    local _URL=''
+
+    show_header "retrieving strips for: $TODAYS"
+
+    if [ -n "$CONNECTIVITY" ]
+    then
+        interwebz || \
+        error 'Cannot detect an Internet connection'
+    fi
+
+    for strip in $COMICS
+    do
+        if [ $(check_definition) = 'function' ]
+        # Lame security check
+        then
+            $strip
+        else
+            error "improper definition. Check $strip"
+        fi
+
+        if [ -n "$COLLECTION" ]
+        then
+            printf "\n* Indexing artists from $strip:\n"
+
+            for item in $COLLECTION
+            do
+                _URL=$(echo "$URL" |$SED 's/_ITEM_/'$item'/g')
+                process_strip
+                [ -n "$SSECONDS" ] && $SLEEP $SSECONDS
+            done
+        else
+            _URL="$URL"
+            process_strip
+        fi
+
+    done
+
+    return 0
+}
+
+
+# vim:set ft=sh:tw=65:nowrap:

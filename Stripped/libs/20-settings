@@ -1,0 +1,147 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120125
+# Last Revision:	Wed Jan 25 2012, 00:02:46 UTC-5
+# ------------------------------------------------- #
+
+
+# ALIASES ------------------------- #
+# Correct true/false interpretation
+alias false=/bin/false
+alias true=/bin/true
+# --------------------------------- #
+
+
+edit_funstrips() {
+    MYEDITOR=$(prg_check $EDITOR) || \
+    error "You don't have a useable terminal EDITOR"
+
+    if [ -w "$LIBSDIR/00-funstrips" ]
+    then
+        cp -vf "$LIBSDIR/00-funstrips" \
+        "$LIBSDIR/.funstrips.old"
+
+        $MYEDITOR "$LIBSDIR/00-funstrips"
+        return 0
+    elif [ -d "$CONFDIR" ]
+    then
+        touch "$CONFDIR/funstrips"
+
+        if [ $($STAT -c '%s' "$CONFDIR/funstrips") -eq 0 ]
+        then
+            cat $LIBSDIR/_function_skeleton \
+            > "$CONFDIR/funstrips"
+        fi
+
+        if [ -s "$CONFDIR/funstrips" ]
+        then
+            cp -vf "$CONFDIR/funstrips" \
+            "$CONFDIR/.funstrips.old"
+        else
+            return 1
+        fi
+
+        $MYEDITOR "$CONFDIR/funstrips"
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+prg_check() {
+    # DESCRIPTION
+    # -----------
+    # Checks whether programs are *readily
+    # available 'type' is not used because it is
+    # shell dependent
+    
+    # USAGE
+    # -----
+    # prg_check [space separated list of programs]
+
+    local UTIL=''
+    local LOOPED=0
+    
+    for i in $*
+    do
+        UTIL="$(which $i 2>/dev/null)"
+        if test -x "$UTIL"
+        then
+            echo $UTIL
+            return 0
+        fi
+
+        UTIL="$(whereis $i 2>/dev/null \
+        |awk '{print $2}')"
+
+        if test -x "$UTIL"
+        then
+            echo $UTIL
+            return 0
+        fi
+
+        UTIL="$i"
+        LOOPED=$(($LOOPED+1))
+    done
+    # GLITCH: Cannot call error with /bin/dash
+    # error "$UTIL was not found. [checks $LOOPED]"
+    return 1
+}
+
+
+DIRECTORY=$HOME/Comics
+CONFDIR=$HOME/.config/stripped
+REPORT=$DIRECTORY/QA.log
+
+TODAYS=$(date +'%y.%m.%d')
+
+VERBOSE=false
+DEBUG=false
+WARNINGS=false
+FORCED=false
+BUGS='http://lifehacks.googlecode.com'
+DAGENT="Mozilla/5.0 (X11; Linux x86_64; rv:11.0a2) \
+Gecko/20120113 Firefox/11.0a2 Iceweasel/11.0a2"
+
+LN=$(prg_check ln)      || error prog 'ln'
+RM=$(prg_check rm)      || error prog 'rm'
+AWK=$(prg_check awk)    || error prog 'awk'
+FMT=$(prg_check fmt)    || error prog 'fmt'
+SED=$(prg_check sed)    || error prog 'sed'
+TEE=$(prg_check tee)    || error prog 'tee'
+DIFF=$(prg_check diff)  || error prog 'diff'
+FILE=$(prg_check file)  || error prog 'file'
+GREP=$(prg_check grep)  || error prog 'grep'
+TAIL=$(prg_check tail)  || error prog 'tail'
+SORT=$(prg_check sort)  || error prog 'sort'
+SLEEP=$(prg_check sleep)|| error prog 'sleep'
+
+DWNL=$(prg_check curl aria2c wget)  \
+|| error 'NO DOWNLOAD UTILITY. Please install (curl, wget, aria2)'
+
+# DOWNLOAD manager options selector
+# May be should be left behind 99-*
+case $DWNL in
+    *curl )
+        DWNLOPT="-L -m 15 -A 'Mozilla/5.0' -s -f -o"
+        ;;
+    *aria2c )
+        DWNLOPT="-t 15 -U 'Mozilla/5.0' -n -q -o"
+        ;;
+    *wget )
+        DWNLOPT="-H -U 'Mozilla/5.0' -q -O"
+        ;;
+esac
+
+
+COMICS=$($AWK '$1 ~ "([a-z|A-Z|_])+\(\)" \
+{ sub("\(\)", "", $1);  print $1 }' \
+$LIBSDIR/[0-9][0-9]-funstrips $LOCAL_FUNSTR \
+| $SORT -u)
+
+
+# vim:set ft=sh:tw=55:nowrap:

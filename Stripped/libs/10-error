@@ -1,0 +1,84 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120122
+# Last Revision:	Sun Jan 22 2012, 19:16:59 UTC-5
+# ------------------------------------------------- #
+
+
+error() {
+    local ERR_WIDTH=42
+
+    if [ -n "$COLOR_SUPPORT" ]
+    then
+        ERR_MSG='\033[01;31mERROR:\033[m'
+    else
+        ERR_MSG='ERROR:'
+    fi
+
+    case $1 in
+    mkdir )
+        shift 1
+        printf \
+        "${ERR_MSG} could not create $@\n" \
+        | $FMT -$ERR_WIDTH
+        ;;
+    chmod )
+        shift 1
+        printf \
+        "${ERR_MSG} cannot set permission $1 in $2\n" \
+        | $FMT -$ERR_WIDTH
+        ;;
+    prog )
+        shift 1
+        printf \
+        "${ERR_MSG} program $1 not found\n" \
+        | $FMT -$ERR_WIDTH
+        ;;
+    retr )
+        shift 1
+        printf \
+        "${ERR_MSG} while retrieving, $1\n" \
+        | $FMT -$ERR_WIDTH
+        ;;
+    * )
+        printf "${ERR_MSG} $*\n" \
+        | $FMT -$ERR_WIDTH
+        ;;
+    esac
+
+
+cat << EOF | $FMT -"$(($ERR_WIDTH-10))"
+
+If you think this is a programming BUG,
+please report it to: $BUGS
+
+Sorry for the inconvenience.
+
+EOF
+    
+    exit 1
+}
+
+
+warn() {
+    # Warnings are printed by show_warnings()
+    _SAVED_WARNINGS="$_SAVED_WARNINGS\n* $*"
+}
+
+
+catch_errors() {
+    if [ "$?" -ne 0 ]
+    then
+        $VERBOSE && \
+        error retr "$comic"
+        return 0
+    fi
+
+    return 1
+}
+
+
+# vim:set ft=sh:tw=55:nowrap:

@@ -1,0 +1,47 @@
+= TODO =
+* [ ] Restructure functions so the program accepts failure counter-measures
+* [ ] Bump version to 0.6
+* [ ] Non cached images into web pages
+* [ ] Strip cached so its contents are just the image URL
+* [ ] Bump version to 0.5
+* [ ] Improve collections so that items can be used individually
+* [ ] provide -r | --rm-old for timed removals (i.e., 10 days old)
+* [ ] replace LS by STAT
+* [ ] provide -p | --proxy option
+* [ ] General cleanup and bump to 0.4
+* [ ] Check out help
+* [ ] Move download works to background and wait for info
+    * [ ] Sepparate local checks process
+    * [ ] Move works to background
+* [ ] Create a trap so picture downloads don't get truncated
+* [ ] Produce a web page index
+* [ ] General cleanup and bump to 0.3
+* [ ] Better timing mechanism
+    * [ ] create new files aside
+    * [ ] do not remove old if they are the same
+* [X] Move all options to ops help and separate from -u
+* [X] Log refinements
+    * [X] Remove log error entries after correct retrieval that day
+    * [X] Enumerate entries instead of repeating dumb lines
+* [X] (add to man/help): Define order of html page by editing `comics`
+* [X] Check duplicates and make links accordingly
+* [X] Downloads selector (support various utilities by priority)
+* [X] Download status on non verbose output (created front symbols)
+* [X] General cleanup and bump to 0.2
+* [o] Avoid calling undefined strips set from user comics
+    * [X] Checks whether $strip is a function
+    * [ ] Check inside functions (later, cannot be bash:type)
+* [X] Do not override with funstrips if file older than 00-funstrips
+* [X] Warnings
+* [X] blacklist
+    * [X] Dislikes implementation
+    * [X] document it
+* [X] Correct creators and makelink for groups
+* [X] Proper mechanism to create groups of strips
+    * [X] Avoid flooding ($SSECONDS)
+    * [X] start cycling after "COLLECTION="
+* [X] Extra rules for difficult sites 
+    # [X] Auto-crop long matches with ' or "
+    # [X] change root pattern 
+* [X] Better/Cleaner debugging facilities
+

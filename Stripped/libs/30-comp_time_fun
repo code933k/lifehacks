@@ -1,0 +1,49 @@
+# ------------------------------------------------- #
+# This file is part of STRIPPED!
+# Copyright (C) 2012 Mario García H. 
+# License: GPL3+
+# ------------------------------------------------- #
+# Version ID:		120120
+# Last Revision:	Fri Jan 20 2012, 17:37:57 UTC-5
+# ------------------------------------------------- #
+
+
+creation_date() {
+    if [ ! -s "$1" ]
+    then
+        error 'creation: FATAL ERROR! no file to check'
+        exit 1
+    fi
+
+    LS=$(prg_check ls)
+
+    $LS -l --time-style="+%y.%m.%d" "$1" \
+    | cut -d ' ' -f 6
+}
+
+
+last_modified() {
+    if [ ! -s "$1" ]
+    then
+        error 'modified: FATAL ERROR! no file to check'
+        exit 1
+    fi
+
+    STAT=$(prg_check stat)
+    $STAT -c '%Y' "$1"
+}
+
+
+compare_files() {
+    if [ -r "$1" ] && [ -r "$2" ]
+    then
+        $DIFF -- "$1" "$2" >/dev/null
+        return 0
+    else
+        error 'BUG 01: compare_files needs 2 arguments'
+        return 1
+    fi
+}
+
+
+# vim:set ft=sh:tw=60:nowrap:
